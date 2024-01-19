@@ -6,13 +6,6 @@
     {% include 'partials/sidenav.html' %}
     <div class="w-full p-4" >    
       <p>Home !</p>
-      {% if request.user.is_authenticated %}
-        <p>{{ request.user.username }}</p>
-        <a href="{% url 'logout' %}">Logout</a>
-      {% else %}
-        <a hx-target="#main" hx-swap="outerHTML" hx-push-url="true" hx-get="{% url 'login' %}">Login</a>
-        <a hx-target="#main" hx-swap="outerHTML" hx-push-url="true" hx-get="{% url 'signup' %}">Signup</a>
-      {% endif %}
       <h1>Welcome!</h1>
     </div>
 </div>

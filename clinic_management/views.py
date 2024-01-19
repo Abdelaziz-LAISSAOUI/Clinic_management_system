@@ -3,25 +3,31 @@ from django.contrib.auth import authenticate, login, logout
 from .forms import UserCreationForm, LoginForm, DoctorLoginForm
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
-
+from .decorators import login_required
 
 # instance = get_object_or_404(Object, name=name, job=job)
 # redirect(reverse('test:output_page', args=instance))
 
 
 # Create your views here.
+
+@login_required
 def hello(request):
     return render(request,"pages/home.html")
 
+@login_required
 def doctors(request):
     return render(request,"pages/doctors.html")
 
+@login_required
 def one_doctor(request, username):
     return render(request, "pages/doctor.html", {'username': username})
 
+@login_required
 def patient(request):
     return render(request,"pages/patients.html")
 
+@login_required
 def appointment(request):
     return render(request,"pages/appointments.html")
 
