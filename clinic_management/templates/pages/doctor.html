@@ -1,0 +1,7 @@
+{% if request.user.is_authenticated %}
+<h1>
+    IT IS doctor {{username}}
+</h1>
+{% else %}
+WHO ARE YOU ! 
+{% endif %}

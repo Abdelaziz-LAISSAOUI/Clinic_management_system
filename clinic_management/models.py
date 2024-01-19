@@ -1,25 +1,26 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 
 # Create your models here.
-
 class Doctor(models.Model):
-    doctor_code = models.CharField(max_length=20, primary_key=True)
-    doctor_first_name = models.CharField(max_length=50)
-    doctor_last_name = models.CharField(max_length=50)
+    user=models.OneToOneField(User,on_delete=models.CASCADE)
     doctor_phone = models.CharField(max_length=15, db_index=True)
-    doctor_email = models.EmailField(db_index=True)
-    department_name = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True, related_name='doctors')
+    department_name = models.ForeignKey('Department', on_delete=models.SET_NULL, related_name='doctors', null=True)
+
+    def __str__(self) -> str:
+        return self.user.get_full_name()
 
 class Department(models.Model):
     department_name = models.CharField(max_length=50, primary_key=True)
-    head = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='department_head')
+    head = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='department_head', null=True, blank=True)
+
+    def __str__(self) -> str:
+        return self.department_name
 
 class Patient(models.Model):
-    patient_code = models.CharField(max_length=20, primary_key=True)
-    patient_first_name = models.CharField(max_length=50)
-    patient_last_name = models.CharField(max_length=50)
+    user=models.OneToOneField(User,on_delete=models.CASCADE)
     patient_phone = models.CharField(max_length=15, db_index=True)
-    patient_email = models.EmailField(db_index=True)
 
 class MedicalRecord(models.Model):
     record_code = models.CharField(max_length=20, primary_key=True)
