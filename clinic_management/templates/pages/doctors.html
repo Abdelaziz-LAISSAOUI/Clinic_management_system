@@ -1,9 +1,14 @@
+
 {% extends 'base.html' %}
 
 {% block content %}
-
-<p>Doctor {{username}}!</p>
-
+<div class="flex h-screen" id="main">
+    <!-- Side Navigation -->
+    {% include 'partials/sidenav.html' %}
+    <div class="w-full p-4" >    
+        <p>DOCTORS !</p>
+    </div>
+</div>
 
 
 {% endblock content %}

@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<p>Appointment !</p>
-
+<div class="flex h-screen" id="main">
+    <!-- Side Navigation -->
+    {% include 'partials/sidenav.html' %}
+    <div class="w-full p-4" >    
+        <p>Appointment !</p>
+    </div>
+</div>
 
 
 {% endblock content %}

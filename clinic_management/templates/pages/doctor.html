@@ -1,7 +1,19 @@
-{% if request.user.is_authenticated %}
-<h1>
-    IT IS doctor {{username}}
-</h1>
-{% else %}
-WHO ARE YOU ! 
-{% endif %}
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="flex h-screen" id="main">
+    <!-- Side Navigation -->
+    {% include 'partials/sidenav.html' %}
+    <div class="w-full p-4" >    
+        {% if request.user.is_authenticated %}
+        <h1>Salam Alaykom dr.{{username}}</h1>
+        {% else %}
+        WHO ARE YOU ! 
+    </div>
+    {% endif %}
+</div>
+
+
+{% endblock content %}

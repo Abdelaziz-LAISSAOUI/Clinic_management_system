@@ -4,6 +4,7 @@ from .forms import UserCreationForm, LoginForm, DoctorLoginForm
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 
+
 # instance = get_object_or_404(Object, name=name, job=job)
 # redirect(reverse('test:output_page', args=instance))
 
@@ -46,8 +47,10 @@ def user_login(request):
             user = authenticate(request, username=username, password=password)
             if user:
                 login(request, user)    
-                return redirect('home')
-                # return render(request, 'home')
+                return render(request, 'pages/home.html')
+            else: 
+                # messages.error(request, )
+                return render(request, 'login.html', {'error_message': 'Invalid username or password. Please try again.'})
     else:
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
@@ -55,7 +58,7 @@ def user_login(request):
 # logout page
 def user_logout(request):
     logout(request)
-    return redirect('doctor-login')
+    return redirect('login')
 
 
 
