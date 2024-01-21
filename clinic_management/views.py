@@ -4,11 +4,17 @@ from .forms import UserCreationForm, LoginForm, DoctorLoginForm
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from .decorators import login_required
-
 # instance = get_object_or_404(Object, name=name, job=job)
 # redirect(reverse('test:output_page', args=instance))
 
+from django.http import HttpResponseRedirect
 
+
+class HTTPResponseHXRedirect(HttpResponseRedirect):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self['HX-Redirect']=self['Location']
+    status_code = 200
 # Create your views here.
 
 @login_required
@@ -52,12 +58,20 @@ def user_login(request):
             password = form.cleaned_data['password']
             user = authenticate(request, username=username, password=password)
             if user:
-                login(request, user)    
+                login(request, user)   
                 return render(request, 'pages/home.html')
             else: 
                 # messages.error(request, )
                 return render(request, 'login.html', {'error_message': 'Invalid username or password. Please try again.'})
     else:
+        if request.user.is_authenticated:
+
+            print('reeeaaaaaaaaaaallly ')
+            response =  render(request, 'pages/home.html')
+            response['HX-Location']= 'home/'
+            print(response)
+            return redirect('index')
+
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
 
