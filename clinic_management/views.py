@@ -115,12 +115,12 @@ def add_patient(request):
     # return JsonResponse({'status': 'success', 'message': 'Patient added successfully'})
     patients = Patient.objects.all()
     print('poooost')
-    return render(request,'partials/patientList.html', {'patients': patients})
+    return render(request,'partials/patientList.html', {'patients': patients, 'newPatient': True })
 
 
 @login_required(login_url="/login")
 def patient_list(request):
     patients = Patient.objects.all()
     print('hhhhhhhhhhhhhhhhhhhhhh')
-    return render(request,'pages/patients.html', {'patients': patients})
+    return render(request,'pages/patients.html', {'patients': patients, 'newPatient': False})
 
