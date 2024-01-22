@@ -1,9 +1,12 @@
 from django.shortcuts import render ,redirect
 from django.contrib.auth import authenticate, login, logout 
-from .forms import UserCreationForm, LoginForm, DoctorLoginForm
+from django.contrib.auth.decorators import login_required 
+# from .forms import UserCreationForm, LoginForm, DoctorLoginForm
+from .forms import LoginForm
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
-from .decorators import login_required
+from .models import *
+
 # instance = get_object_or_404(Object, name=name, job=job)
 # redirect(reverse('test:output_page', args=instance))
 
@@ -17,23 +20,23 @@ class HTTPResponseHXRedirect(HttpResponseRedirect):
     status_code = 200
 # Create your views here.
 
-@login_required
+@login_required(login_url="/login")
 def hello(request):
     return render(request,"pages/home.html")
 
-@login_required
+@login_required(login_url="/login")
 def doctors(request):
     return render(request,"pages/doctors.html")
 
-@login_required
+@login_required(login_url="/login")
 def one_doctor(request, username):
     return render(request, "pages/doctor.html", {'username': username})
 
-@login_required
+@login_required(login_url="/login")
 def patient(request):
     return render(request,"pages/patients.html")
 
-@login_required
+@login_required(login_url="/login")
 def appointment(request):
     return render(request,"pages/appointments.html")
 
@@ -93,3 +96,31 @@ def doctor_login(request):
         form = DoctorLoginForm(request)
 
     return render(request, 'doctor-login.html', {'form': form})
+
+
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.contrib.auth.models import User
+
+@require_POST
+@login_required(login_url="/login")
+def add_patient(request):
+    username = request.POST.get('username')
+    patient_phone = request.POST.get('patient_phone')
+
+    # Assuming you have proper validation before creating a patient
+    user = User.objects.create(username=username)
+    patient = Patient.objects.create(user=user, patient_phone=patient_phone)
+
+    # return JsonResponse({'status': 'success', 'message': 'Patient added successfully'})
+    patients = Patient.objects.all()
+    print('poooost')
+    return render(request,'partials/patientList.html', {'patients': patients})
+
+
+@login_required(login_url="/login")
+def patient_list(request):
+    patients = Patient.objects.all()
+    print('hhhhhhhhhhhhhhhhhhhhhh')
+    return render(request,'pages/patients.html', {'patients': patients})
+
