@@ -22,6 +22,9 @@ class Patient(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE)
     patient_phone = models.CharField(max_length=15, db_index=True)
 
+    def __str__(self) -> str:
+        return self.user.username
+    
 class MedicalRecord(models.Model):
     record_code = models.CharField(max_length=20, primary_key=True)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='medical_records', db_index=True)

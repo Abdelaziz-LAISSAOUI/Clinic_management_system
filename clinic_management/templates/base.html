@@ -7,6 +7,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        #success{
+            animation: toastAnimation 10s forwards; 
+        }
+        @keyframes toastAnimation {
+            0% {
+                top: -100px; /* Start off-screen */
+                opacity: 0;
+            }
+            10% {
+                top: 1rem; /* Move down */
+                opacity: 1;
+            }
+            90% {
+                top: 1rem; /* Stay for a few seconds */
+                opacity: 1;
+            }
+            100% {
+                top: -100px; /* Move off-screen to the right */
+                opacity: 0;
+            }
+        }
+    </style>
     <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
     <!-- TAILWIND -->
@@ -16,7 +39,9 @@
 {% endif %}
             {% block content %}
             {% endblock %}
-{% if request|is_hx_request %}
+            {% if request|is_hx_request %}
+
+
 </body>
 </html>
 {% endif %}
