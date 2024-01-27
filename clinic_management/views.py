@@ -107,20 +107,24 @@ from django.contrib.auth.models import User
 def add_patient(request):
     username = request.POST.get('username')
     patient_phone = request.POST.get('patient_phone')
-
-    # Assuming you have proper validation before creating a patient
     user = User.objects.create(username=username)
     patient = Patient.objects.create(user=user, patient_phone=patient_phone)
-
-    # return JsonResponse({'status': 'success', 'message': 'Patient added successfully'})
     patients = Patient.objects.all()
     print('poooost')
     return render(request,'partials/patientList.html', {'patients': patients, 'newPatient': True })
 
+@require_POST
+@login_required(login_url="/login")
+def update_patient(request, patient_id):
+    if request.method == 'POST':
+        patient = Patient.objects.get(id=patient_id)
+        patient.name = request.POST['name']
+        patient.save()
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False})
 
 @login_required(login_url="/login")
 def patient_list(request):
     patients = Patient.objects.all()
-    print('hhhhhhhhhhhhhhhhhhhhhh')
     return render(request,'pages/patients.html', {'patients': patients, 'newPatient': False})
 

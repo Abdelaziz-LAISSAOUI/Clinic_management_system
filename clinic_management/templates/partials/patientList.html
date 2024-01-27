@@ -12,13 +12,19 @@
                     Username
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    Color
+                   Name
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    Category
+                    Surname
                 </th>
                 <th scope="col" class="px-6 py-3">
                     Phone-number
+                </th>
+                <th scope="col" class="px-6 py-3">
+                   Birth date
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    <!-- Action -->
                 </th>
                 <th scope="col" class="px-6 py-3">
                     <!-- Action -->
@@ -26,7 +32,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+            <!-- <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     Apple MacBook Pro 17"
                 </th>
@@ -95,23 +101,41 @@
                     <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
                 </td>
             </tr>
-            <!-- -------------------- -->
+            -------------------- -->
             {% for patient in patients %}
             <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     {{ patient.user.username }} 
                 </th>
+                <td class="px-6 py-4 ">
+                    <p class="relative w-16 overflow-hidden whitespace-nowrap overflow-ellipsis group hover:overflow-visible">
+                        {{ patient.user.username }}
+                        <span class="absolute z-10 hidden bg-gray-800 text-white text-xl p-1 rounded whitespace-nowrap -top-full group-hover:block overflow-hidden">
+                            {{ patient.user.username }}
+                        </span>
+                    </p>                                       
+                </td>                                
                 <td class="px-6 py-4">
-                    Red
-                </td>
-                <td class="px-6 py-4">
-                    Wearables
+                    <p class="relative w-16 overflow-hidden whitespace-nowrap overflow-ellipsis group hover:overflow-visible">
+                        {{ patient.user.username }}
+                        <span class="absolute z-10 hidden bg-gray-800 text-white text-xl p-1 rounded whitespace-nowrap -top-full group-hover:block overflow-hidden">
+                            {{ patient.user.username }}
+                        </span>
+                    </p>
                 </td>
                 <td class="px-6 py-4">
                     {{ patient.patient_phone }}
                 </td>
                 <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                    <!-- {{ patient.patient_BirthDate }} -->
+                </td>
+                <td class="px-6 py-4">
+                    <a href="{% url 'update_patient' %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                        Edit
+                    </a>
+                </td>
+                <td class="px-6 py-4">
+                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a>
                 </td>
             </tr>
             {% endfor %}
@@ -125,4 +149,70 @@
 
 {% comment %} <div class="py-3 px-5 mb-4 bg-red-100 text-red-900 text-sm rounded-md border border-red-200" role="alert">
     A simple <strong>danger</strong> alert—check it out!
-</div> {% endcomment %}
+</div>
+
+<script>
+  
+document.addEventListener('DOMContentLoaded', function () {
+    const editButtons = document.querySelectorAll('.edit-button');
+
+    editButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const row = button.closest('tr');
+            const cells = row.querySelectorAll('.editable');
+
+            cells.forEach(cell => {
+                const currentValue = cell.textContent.trim();
+                const input = document.createElement('input');
+                input.value = currentValue;
+                cell.textContent = '';
+                cell.appendChild(input);
+            });
+
+            const saveButton = document.createElement('button');
+            saveButton.textContent = 'Save';
+            saveButton.addEventListener('click', function () {
+                // Example AJAX request
+                const formData = new FormData();
+                cells.forEach(cell => {
+                    formData.append(cell.dataset.name, cell.querySelector('input').value);
+                });
+
+                fetch(`/update-patient/${row.dataset.id}/`, {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Add logic here to update the UI or reload the page
+                        row.querySelector('.edit-button').style.display = 'inline-block';
+                        row.querySelector('.save-button').style.display = 'none';
+                        row.querySelector('.cancel-button').style.display = 'none';
+                    } else {
+                        console.error('Failed to update patient information.');
+                    }
+                });
+            });
+
+            const cancelButton = document.createElement('button');
+            cancelButton.textContent = 'Cancel';
+            cancelButton.addEventListener('click', function () {
+                // Add logic here to revert changes
+                row.querySelector('.edit-button').style.display = 'inline-block';
+                row.querySelector('.save-button').style.display = 'none';
+                row.querySelector('.cancel-button').style.display = 'none';
+            });
+
+            row.querySelector('.edit-button').style.display = 'none';
+            row.querySelector('.save-button').style.display = 'inline-block';
+            row.querySelector('.cancel-button').style.display = 'inline-block';
+
+            row.appendChild(saveButton);
+            row.appendChild(cancelButton);
+        });
+    });
+});
+
+</script>
+{% endcomment %}
