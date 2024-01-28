@@ -1,0 +1,20 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="flex h-screen" id="main">
+    <!-- Side Navigation -->
+    {% include 'partials/sidenav.html' %}
+   
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create Examination</button>
+</form>
+
+</div>
+
+
+{% endblock content %}
+
+

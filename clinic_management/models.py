@@ -73,7 +73,7 @@ class Appointment(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='appointments')
     date = models.ForeignKey(TDate, on_delete=models.CASCADE, related_name='appointments')
     confirmation = models.BooleanField(default=False)
-    canelation = models.BooleanField(default=False)
+    cancellated = models.BooleanField(default=False)
 
 class Examination(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='examinations', db_index=True)

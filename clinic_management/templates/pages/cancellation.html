@@ -2,22 +2,44 @@
 
 {% block content %}
 
-<h2>Change Cancellation</h2>
+<div class="flex h-screen" id="main">
+    <!-- Side Navigation -->
+    {% include 'partials/sidenav.html' %}
+    <div class="overflow-y-scroll w-full p-10" >    
+       
+       
+        
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+       
+            <div class=" items-center m-10 mx-40 bg-white shadow-md rounded-md overflow-hidden ">
+                <div class="p-6">
+                    <h2 class="text-xl font-bold mb-4">Cancellation Form</h2>
+                    
+                    <form method="post" action="{% url 'cancellation' %}" hx-post="true">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label for="date" class="block text-gray-700 text-sm font-bold mb-2">Select Date:</label>
+                            <input type="date" id="date" name="date" class="border rounded w-1/2 py-2 px-3 mb-6" required>
+                        </div>
+                        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700">Cancel the day</button>
+                    </form>
 
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+                </div>
+            </div>
+            
+       
+            
+        
+
+    </div>
+</div>
 
 
-    <form method="post" action="{% url 'cancellation' %}">
-        {% csrf_token %}
-        <label for="date">Select Date:</label>
-        <input type="date" id="date" name="date" required>
-        <button type="submit">Change Cancellation</button>
-    </form>
 
 {% endblock content %}

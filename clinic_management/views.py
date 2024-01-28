@@ -136,37 +136,51 @@ def patient_list(request):
     return render(request,'pages/patients.html', {'patients': patients, 'newPatient': False})
 
 @login_required(login_url="/login")
-def oppointementDlist(request):
+def appointementDlist(request):
     
     if request.user.groups.filter(name="doctorGroup").exists():
-        try:
-          appointments = Appointment.objects.filter(doctor=request.user).order_by("date")
-        except Exception as e:
-            print(f"Error fetching appointments: {e}")
-
+        appointments = Appointment.objects.order_by("date")
         return render(request, "pages/doctorappointements.html", {"appointments": appointments})
     else:
         return render(request, "pages/doctorappointements.html")
     
 from django.contrib import messages
-@login_required(login_url="/login")
+# @login_required(login_url="/login")
 def cancellation(request):
+    print('canceled')
+    
     if request.method == 'POST':
         selected_date = request.POST.get('date')
-
+        
         # Check if the selected date is a valid date
         try:
             date_obj = TDate.objects.get(date=selected_date)
         except TDate.DoesNotExist:
             messages.error(request, f"Invalid date: {selected_date}")
-            return redirect('cancellation')
+            return render(request, 'pages/cancellation.html')
 
         # Update cancellation status for appointments on the selected date
-        appointments = Appointment.objects.filter(date=date_obj,doctor=request.user)
-        appointments.update(canelation=True)
+        appointments = Appointment.objects.filter(date=date_obj)
+        appointments.update(cancellated=True)
 
         messages.success(request, f"Cancellation status updated for appointments on {selected_date}")
+        print('success')
         return redirect('cancellation')
 
     return render(request, 'pages/cancellation.html')
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Examination, Patient
+
+def create_examination(request, patient_id):
+    patient = get_object_or_404(Patient, id=patient_id)
+
+    # if request.method == 'POST':
+    #     # Handle form submission
+    #     # ...
+
+    return render(request, 'create_examination.html', {'patient': patient})
+
+
     
