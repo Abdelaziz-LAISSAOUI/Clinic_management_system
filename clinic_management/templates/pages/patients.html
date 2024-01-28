@@ -5,38 +5,45 @@
     <!-- Side Navigation -->
     {% include 'partials/sidenav.html' %}
     <div class="overflow-y-scroll w-full p-4">
-        <h1 class="text-3xl font-bold mb-4">Patients</h1>
-        {% comment %} <p>{{ patients }}</p> {% endcomment %}
+    <div class="flex justify-between items-center h-fit p-4">
+        <div class="flex-grow items-center"><h1 class="font-bold text-2xl">Patients</h1></div>
+        <!-- Show/Hide Button -->
+        <button id="toggleCardBtn" class="bg-blue-500 text-white text-center p-2 rounded-md hover:bg-blue-700">
+         new 
+        </button>
+    </div>
 
+    {% comment %} <p>{{ patients }}</p> {% endcomment %}
+    
+    <!-- Add Patient Card (Initially Hidden) -->
+ 
+    <div id="addPatientCard" class="max-w bg-white rounded-md p-4 shadow-md mb-2 hidden">
+        
+        <form id="addPatientForm" hx-post="{% url 'add_patient' %}" hx-target="#patientList">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="username" class="block text-sm font-medium text-gray-700">Username:</label>
+                <input type="text" id="username" name="username" required
+                       class="mt-1 p-2 border rounded-md w-full focus:outline-none focus:border-blue-500">
+            </div>
+            <div class="mb-4">
+                <label for="patient_phone" class="block text-sm font-medium text-gray-700">Phone:</label>
+                <input type="text" id="patient_phone" name="patient_phone" required
+                       class="mt-1 p-2 border rounded-md w-full focus:outline-none focus:border-blue-500">
+            </div>
+            <button form="addPatientForm" type="submit" class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700">Add Patient</button>
+        </form>
+        
+    </div>
+  
+    
         <!-- Existing Patients List -->
         <div id="patientList">
             {% include 'partials/patientList.html' %}
         </div>
 
 
-        <!-- Show/Hide Button -->
-        <button id="toggleCardBtn" class="bg-blue-500 text-white w-full text-center mt-4 p-2 rounded-md hover:bg-blue-700">
-         Add new patient 
-        </button>
 
-        <!-- Add Patient Card (Initially Hidden) -->
-        <div id="addPatientCard" class="max-w-md bg-white rounded-md p-6 shadow-md mb-6 hidden">
-            <h2 class="text-2xl font-bold mb-4">Add Patient</h2>
-            <form id="addPatientForm" hx-post="{% url 'add_patient' %}" hx-target="#patientList">
-                {% csrf_token %}
-                <div class="mb-4">
-                    <label for="username" class="block text-sm font-medium text-gray-700">Username:</label>
-                    <input type="text" id="username" name="username" required
-                           class="mt-1 p-2 border rounded-md w-full focus:outline-none focus:border-blue-500">
-                </div>
-                <div class="mb-4">
-                    <label for="patient_phone" class="block text-sm font-medium text-gray-700">Phone:</label>
-                    <input type="text" id="patient_phone" name="patient_phone" required
-                           class="mt-1 p-2 border rounded-md w-full focus:outline-none focus:border-blue-500">
-                </div>
-                <button form="addPatientForm" type="submit" class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700">Add Patient</button>
-            </form>
-        </div>
     </div>
 </div>
 

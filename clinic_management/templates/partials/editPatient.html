@@ -1,0 +1,24 @@
+<!-- Add the "edit-button" and "save-button" classes to the appropriate cells -->
+<tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+    <!-- ... other cells ... -->
+    <td class="px-6 py-4 editable">
+        <p class="relative w-16 overflow-hidden whitespace-nowrap overflow-ellipsis group hover:overflow-visible">
+            {{ patient.name }}
+            <span class="absolute z-10 hidden bg-gray-800 text-white text-xs p-1 rounded whitespace-nowrap -right-full group-hover:block overflow-hidden">
+                {{ patient.name }}
+            </span>
+        </p>
+    </td>
+    <!-- ... other cells ... -->
+    <td class="px-6 py-4">
+        <button class="edit-button font-medium text-blue-600 dark:text-blue-500 hover:underline">
+            Edit
+        </button>
+        <button class="save-button font-medium text-green-600 dark:text-green-500 hover:underline" style="display: none;">
+            Save
+        </button>
+        <button class="cancel-button font-medium text-red-600 dark:text-red-500 hover:underline" style="display: none;">
+            Cancel
+        </button>
+    </td>
+</tr>
