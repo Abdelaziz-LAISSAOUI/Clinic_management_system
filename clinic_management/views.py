@@ -22,7 +22,14 @@ class HTTPResponseHXRedirect(HttpResponseRedirect):
 
 @login_required(login_url="/login")
 def hello(request):
-    return render(request,"pages/home.html")
+    if request.user.is_authenticated:
+      
+        for group in request.user.groups.all():
+            print(group.name)
+    else:
+        print("User is not authenticated.")
+    
+    return render(request, "pages/home.html")
 
 @login_required(login_url="/login")
 def doctors(request):
@@ -128,3 +135,38 @@ def patient_list(request):
     patients = Patient.objects.all()
     return render(request,'pages/patients.html', {'patients': patients, 'newPatient': False})
 
+@login_required(login_url="/login")
+def oppointementDlist(request):
+    
+    if request.user.groups.filter(name="doctorGroup").exists():
+        try:
+          appointments = Appointment.objects.filter(doctor=request.user).order_by("date")
+        except Exception as e:
+            print(f"Error fetching appointments: {e}")
+
+        return render(request, "pages/doctorappointements.html", {"appointments": appointments})
+    else:
+        return render(request, "pages/doctorappointements.html")
+    
+from django.contrib import messages
+@login_required(login_url="/login")
+def cancellation(request):
+    if request.method == 'POST':
+        selected_date = request.POST.get('date')
+
+        # Check if the selected date is a valid date
+        try:
+            date_obj = TDate.objects.get(date=selected_date)
+        except TDate.DoesNotExist:
+            messages.error(request, f"Invalid date: {selected_date}")
+            return redirect('cancellation')
+
+        # Update cancellation status for appointments on the selected date
+        appointments = Appointment.objects.filter(date=date_obj,doctor=request.user)
+        appointments.update(canelation=True)
+
+        messages.success(request, f"Cancellation status updated for appointments on {selected_date}")
+        return redirect('cancellation')
+
+    return render(request, 'pages/cancellation.html')
+    

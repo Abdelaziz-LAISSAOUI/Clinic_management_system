@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="flex h-screen" id="main">
+    <!-- Side Navigation -->
+    {% include 'partials/sidenav.html' %}
+    <div class="overflow-y-scroll w-full p-4">
+    <div class="flex justify-between items-center h-fit p-4">
+        <div class="flex-grow items-center"><h1 class="font-bold text-2xl">Your oppointements</h1></div>
+        <!-- Show/Hide Button -->
+        <button id="toggleCardBtn" class="bg-blue-500 text-white text-center p-2 rounded-md hover:bg-blue-700">
+         concel a day
+        </button>
+    </div>
+    
+    
+  
+    
+        <!-- Existing Patients List -->
+        <div id="patientList">
+            {% include 'partials/oppointementDlist.html' %}
+        </div>
+
+
+
+    </div>
+</div>
+
+<script>
+    var toggleCardBtn = document.getElementById('toggleCardBtn');
+    var addPatientCard = document.getElementById('addPatientCard');
+    
+
+    toggleCardBtn.addEventListener('click', function(){
+        addPatientCard.classList.toggle('hidden');
+        console.log('clikced\sdgajksdngjkadfgadfg')
+    });
+    
+    
+
+</script>
+
+{% endblock content %}

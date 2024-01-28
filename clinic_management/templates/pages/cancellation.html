@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Change Cancellation</h2>
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+
+    <form method="post" action="{% url 'cancellation' %}">
+        {% csrf_token %}
+        <label for="date">Select Date:</label>
+        <input type="date" id="date" name="date" required>
+        <button type="submit">Change Cancellation</button>
+    </form>
+
+{% endblock content %}
