@@ -4,9 +4,10 @@
 <div class="flex h-screen" id="main">
     <!-- Side Navigation -->
     {% include 'partials/sidenav.html' %}
-    <div class="overflow-y-scroll w-full p-4" >    
-        <p>Appointment !</p>
-    </div>
+    <div class="overflow-y-scroll w-full p-4" >
+        <h2 class="p-4 text-3xl font-bold mb-4">Appointment !</h2>
+        {% include "partials/appointmentsList.html" %}
+    </div>    
 </div>
 
 

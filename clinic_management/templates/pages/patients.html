@@ -1,26 +1,18 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <div class="flex h-screen" id="main">
     <!-- Side Navigation -->
     {% include 'partials/sidenav.html' %}
     <div class="overflow-y-scroll w-full p-4">
-        <h1 class="text-3xl font-bold mb-4">Patients</h1>
-        {% comment %} <p>{{ patients }}</p> {% endcomment %}
-
-        <!-- Existing Patients List -->
-        <div id="patientList">
-            {% include 'partials/patientList.html' %}
+        <div class="flex justify-between items-center h-fit p-4">
+            <h1 class="text-3xl font-bold mb-4">Patients</h1>
+            <!-- Show/Hide Button -->
+            <button id="toggleCardBtn" class="bg-blue-500 text-white text-center p-2 rounded-md hover:bg-blue-700">
+                Add New Patient 
+            </button>
         </div>
-
-
-        <!-- Show/Hide Button -->
-        <button id="toggleCardBtn" class="bg-blue-500 text-white w-full text-center mt-4 p-2 rounded-md hover:bg-blue-700">
-         Add new patient 
-        </button>
-
         <!-- Add Patient Card (Initially Hidden) -->
-        <div id="addPatientCard" class="max-w-md bg-white rounded-md p-6 shadow-md mb-6 hidden">
+        <div id="addPatientCard" class="w-full bg-white rounded-md p-6 shadow-md mb-6 hidden">
             <h2 class="text-2xl font-bold mb-4">Add Patient</h2>
             <form id="addPatientForm" hx-post="{% url 'add_patient' %}" hx-target="#patientList">
                 {% csrf_token %}
@@ -37,9 +29,12 @@
                 <button form="addPatientForm" type="submit" class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700">Add Patient</button>
             </form>
         </div>
+        <!-- Existing Patients List -->
+        <div id="patientList">
+            {% include 'partials/patientList.html' %}
+        </div>
     </div>
 </div>
-
 <script>
     var toggleCardBtn = document.getElementById('toggleCardBtn');
     var addPatientCard = document.getElementById('addPatientCard');
@@ -47,11 +42,7 @@
 
     toggleCardBtn.addEventListener('click', function(){
         addPatientCard.classList.toggle('hidden');
-        console.log('clikced\sdgajksdngjkadfgadfg')
     });
-    
-    
-
 </script>
 
 {% endblock content %}

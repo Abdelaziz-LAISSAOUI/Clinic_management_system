@@ -1,0 +1,35 @@
+    {% if doctors %}
+    <div class="mb-4" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' hx-post="{% url 'book_apppointment'%}" hx-trigger="change" hx-target=".choiceList">
+        <label for="doctor" class="block text-sm font-medium text-gray-700">Doctor:</label>
+        <select type="text" id="doctor" name="doctor" require class="mt-1 p-2 border rounded-md w-full focus:outline-none focus:border-blue-500">
+            <option value="" disabled selected>Select a Doctor</option>
+            {% for doctor in doctors%}
+                <option value={{doctor.user.username}}>Dr.{{doctor.user.username}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    {% elif dates %}
+        <label for="datepicker" class="block text-sm font-medium text-gray-700">Doctor is available select any date starting from tommorow:</label>
+        <input id="datepicker" name="date" min="" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Select date">
+        <script>
+            // Get the current date
+            var today = new Date();
+        
+            // Calculate tomorrow's date
+            var tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
+        
+            // Format the date as "YYYY-MM-DD" for the input's "min" attribute
+            var tomorrowFormatted = tomorrow.toISOString().split('T')[0];
+        
+            // Set the minimum date for the input
+            document.getElementById('datepicker').min = tomorrowFormatted;
+        </script>   
+        
+    {% endif %}
+    
+    <div class="choiceList"></div>
+
+    <button class="mt-4 w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700" type='submit' >
+        add appointment
+    </button>

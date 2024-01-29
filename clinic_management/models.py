@@ -9,7 +9,7 @@ class Doctor(models.Model):
     department_name = models.ForeignKey('Department', on_delete=models.SET_NULL, related_name='doctors', null=True)
 
     def __str__(self) -> str:
-        return self.user.get_full_name()
+        return self.user.username
 
 class Department(models.Model):
     department_name = models.CharField(max_length=50, primary_key=True)
@@ -20,7 +20,7 @@ class Department(models.Model):
 
 class Patient(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE)
-    patient_phone = models.CharField(max_length=15, db_index=True)
+    patient_phone = models.CharField(max_length=15, db_index=True, unique=True)
 
     def __str__(self) -> str:
         return self.user.username
@@ -37,15 +37,19 @@ class MedicalTest(models.Model):
 class TDate(models.Model):
     date = models.DateField(primary_key=True, db_index=True)
 
+    def __str__(self)->str:
+        return str(self.date)
+
 class TestMade(models.Model):
     record_code = models.ForeignKey(MedicalRecord, on_delete=models.CASCADE, related_name='tests_made', db_index=True)
     test_name = models.ForeignKey(MedicalTest, on_delete=models.CASCADE, related_name='tests_made')
 
 class Appointment(models.Model):
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='appointments', db_index=True)
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='appointments')
-    date = models.ForeignKey(TDate, on_delete=models.CASCADE, related_name='appointments')
+    patient = models.OneToOneField(Patient, on_delete=models.CASCADE, primary_key=True, related_name='appointments')
+    doctor = models.OneToOneField(Doctor, on_delete=models.CASCADE, related_name='appointments')
+    date = models.OneToOneField(TDate, on_delete=models.CASCADE, related_name='appointments')
     confirmation = models.BooleanField(default=False)
+    cancelation = models.BooleanField(default=False)
 
 class Examination(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='examinations', db_index=True)

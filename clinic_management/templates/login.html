@@ -14,7 +14,7 @@
       </div>
     </div>
     <div class="mt-10">
-      <form  hx-push-url="/" hx-post="." hx-target="#main" hx-swap="outerHTML"  >
+      <form hx-push-url="true" hx-push-url="/" hx-post="." hx-target="#main" hx-swap="outerHTML"  >
         {% csrf_token %}
         <div class="flex flex-col mb-6">
           <label for="username" class="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">E-Mail Address:</label>

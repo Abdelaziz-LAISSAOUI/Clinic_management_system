@@ -8,8 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        #success{
-            animation: toastAnimation 10s forwards; 
+        .toast{
+            animation: toastAnimation 5s forwards; 
         }
         @keyframes toastAnimation {
             0% {
@@ -34,14 +34,20 @@
     <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
     <!-- TAILWIND -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FLOW BITE -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
 </head>
 <body class="bg-gray-200">
-{% endif %}
-            {% block content %}
-            {% endblock %}
-            {% if request|is_hx_request %}
+    {% endif %}
+    {% block content %}
+    
+    {% endblock %}
+    {% if request|is_hx_request %}
+    
 
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
 </body>
+
 </html>
 {% endif %}

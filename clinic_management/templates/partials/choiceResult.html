@@ -1,0 +1,22 @@
+{% if dates %}
+    {% comment %} {% if result %}
+    <div class="mb-4" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+        <label for="doctor" class="block text-sm font-medium text-gray-700">Doctor:</label>
+        <select type="text" id="doctor" name="department" require class="mt-1 p-2 border rounded-md w-full focus:outline-none focus:border-blue-500">
+            {% for r in result%}
+                <option value={{r.date}}>{{r.date}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    {% else %} {% endcomment %}
+    <label for="datepicker" class="block text-sm font-medium text-gray-700">Doctor is available select any date starting from tommorow:</label>
+    <input id="datepicker" name="date" min="" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Select date">
+        
+        
+    {% comment %} {%endif%} {% endcomment %}
+{% else %}
+    {% if result %}
+    {% else %}
+        <p class="text-red-600 font-semibold text-center text-xl">NO RESULT AVAILBLE</p>
+    {% endif %}
+{%endif%}
