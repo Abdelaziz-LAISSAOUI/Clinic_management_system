@@ -255,13 +255,16 @@ def add_patient(request):
     username = request.POST.get('username').strip()
     patient_phone = request.POST.get('patient_phone').strip()
 
+    print(f"Received username: {username}, patient_phone: {patient_phone}")
     # Assuming you have proper validation before creating a patient
     try:
-        # user = User.objects.create(username=username)
-        user = User(username=username)
-        user.save()
+        user, created = User.objects.get_or_create(username=username)
+        if not created:
+            # User already exists, handle it appropriately
+            patients = Patient.objects.all()
+            return render(request, 'partials/patientList.html', {'patients': patients, 'toast_error': True})
+        
         patient = Patient.objects.create(user=user, patient_phone=patient_phone)
-        print(patient)
     except IntegrityError as e:
         if 'UNIQUE constraint failed: clinic_management_patient.patient_phone' in str(e):
             user.delete()
@@ -273,6 +276,7 @@ def add_patient(request):
         return render(request,'partials/patientList.html', {'patients': patients, 'toast_error': True })
 
     # return JsonResponse({'status': 'success', 'message': 'Patient added successfully'})
+    print("Code execution after try block")
     patients = Patient.objects.all()
     return render(request,'partials/patientList.html', {'patients': patients, 'toast_success': True })
 
