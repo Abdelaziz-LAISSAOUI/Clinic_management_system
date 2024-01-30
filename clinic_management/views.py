@@ -174,6 +174,7 @@ def add_appointment(request):
 
     print(department, booking_choice)
     if booking_choice == 'doctor':
+        # the doctors of the department so he can choose from  
         doctors = Doctor.objects.filter(department_name=department)
         available_dates= None
     else: 
@@ -190,27 +191,49 @@ def add_appointment(request):
         ).values('date') 
 
 
-    return render(request,"partials/add_appointment.html", {'dates':available_dates, 'doctors': doctors})
+    return render(request,"partials/add_appointment.html", {'dates':available_dates, 'doctors': doctors, 'department':department})
 
 @login_required(login_url="/login")
 def book_apppointment(request):
     doctor = request.POST.get('doctor')
-    print(doctor)
-    user = User.objects.get(username=doctor)
-    doctor = Doctor.objects.get(user=user)  
-    
-    # Assuming the doctor is available if the number of appointments on a date is less than 20
-    available_dates = TDate.objects.filter(
-        appointments__doctor=doctor,
-        appointments__cancelation=False
-    ).annotate(num_appointments=Count('appointments')).filter(
-        num_appointments__lt=20
-    ).values_list('date', flat=True)
-    
-    # Now 'available_date' contains the date on which the doctor "d" is available
+    if doctor:
+        print(doctor)
+        user = User.objects.get(username=doctor)
+        doctor = Doctor.objects.get(user=user)  
+
+        # Assuming the doctor is available if the number of appointments on a date is less than 20
+        available_dates = TDate.objects.filter(
+            appointments__doctor=doctor,
+            appointments__cancelation=False
+        ).annotate(num_appointments=Count('appointments')).filter(
+            num_appointments__lt=20
+        ).values_list('date', flat=True)
+
+        # Now 'available_date' contains the date on which the doctor "d" is available
+        return render(request,"partials/choiceResult.html", {"result": available_dates, "dates":True})
+    else: 
+        date = request.POST.get('date')
+        department = request.POST.get('department')
+        
+
+        # Convert the selected date to a TDate object
+        date_object, created = TDate.objects.get_or_create(date=date)
+
+        formatted_date = date_object.date.strftime('%Y-%m-%d')
+
+        # Query to get doctors in the specified department with fewer than 20 appointments on the given date
+        doctors = Doctor.objects.filter(department_name__department_name=department)
+        doctors = doctors.annotate(num_appointments=Count('appointments__date', filter=models.Q(appointments__date__date=formatted_date)))
+        doctors = doctors.filter(num_appointments__lt=20)
 
 
-    return render(request,"partials/choiceResult.html", {"result": available_dates, "dates":True})
+        print(date, department)
+        return render(request,"partials/choiceResult.html", {"result": doctors})
+
+
+
+
+
 
 @require_POST
 @login_required(login_url="/login")
@@ -218,8 +241,10 @@ def create_appointment(request):
     print(request.POST.get('patient'))
     print(request.POST.get('doctor'))
 
-   
+    
+
     date = request.POST.get('date')
+    print(date)
     patient_user = User.objects.get(username=request.POST.get('patient'))
     patient= Patient.objects.get(user=patient_user)
 

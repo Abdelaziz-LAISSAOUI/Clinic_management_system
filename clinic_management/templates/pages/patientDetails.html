@@ -24,7 +24,7 @@
                 </div>
             </div>
         {%else%}
-        <h2 class="text-3xl font-bold mb-4">Patient <span class="text-blue-500 " >{{patient.user.username}}</span></h2>
+        <h2 class="text-3xl font-bold mb-4">Patient <span class="text-blue-500" >{{patient.user.username}}</span></h2>
 
         <h3 class="font-semibold text-xl mb-4" >
             Edit phone number
@@ -60,7 +60,8 @@
                 <div id="addAppFormContent">
                     <div class="mb-4">
                     <label for="department" class="block text-sm font-medium text-gray-700">Department:</label>
-                    <select type="text" id="department" name="department" require class="mt-1 p-2 border rounded-md w-full focus:outline-none focus:border-blue-500">
+                    <select type="text" id="department" name="department" required class="mt-1 p-2 border rounded-md w-full focus:outline-none focus:border-blue-500">
+                        <option value="" disabled selected>Select a Department</option>
                         {% for department in departements%}
                             <option value={{department.department_name}}>{{department.department_name}}</option>
                         {% endfor %}

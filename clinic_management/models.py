@@ -45,11 +45,20 @@ class TestMade(models.Model):
     test_name = models.ForeignKey(MedicalTest, on_delete=models.CASCADE, related_name='tests_made')
 
 class Appointment(models.Model):
-    patient = models.OneToOneField(Patient, on_delete=models.CASCADE, primary_key=True, related_name='appointments')
-    doctor = models.OneToOneField(Doctor, on_delete=models.CASCADE, related_name='appointments')
-    date = models.OneToOneField(TDate, on_delete=models.CASCADE, related_name='appointments')
+    patient = models.ForeignKey('Patient', on_delete=models.CASCADE, related_name='appointments')
+    doctor = models.ForeignKey('Doctor', on_delete=models.CASCADE, related_name='appointments')
+    date = models.ForeignKey('TDate', on_delete=models.CASCADE, related_name='appointments')
     confirmation = models.BooleanField(default=False)
     cancelation = models.BooleanField(default=False)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['patient', 'doctor', 'date'],
+                name='unique_patient_doctor_date_combination'
+            )
+        ]
+
 
 class Examination(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='examinations', db_index=True)

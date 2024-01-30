@@ -11,12 +11,37 @@
     {% else %} {% endcomment %}
     <label for="datepicker" class="block text-sm font-medium text-gray-700">Doctor is available select any date starting from tommorow:</label>
     <input id="datepicker" name="date" min="" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Select date">
-        
-        
+    
+    <script>
+        // Get the current date
+        var today = new Date();
+    
+        // Calculate tomorrow's date
+        var tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
+    
+        // Format the date as "YYYY-MM-DD" for the input's "min" attribute
+        var tomorrowFormatted = tomorrow.toISOString().split('T')[0];
+    
+        // Set the minimum date for the input
+        document.getElementById('datepicker').min = tomorrowFormatted;
+    </script> 
+    
     {% comment %} {%endif%} {% endcomment %}
 {% else %}
     {% if result %}
-    {% else %}
-        <p class="text-red-600 font-semibold text-center text-xl">NO RESULT AVAILBLE</p>
+    <div class="mt-4">
+        <label for="doctor" class="block text-sm font-medium text-gray-700">Doctor:</label>
+        <select type="text" id="doctor" name="doctor" required class="mt-1 py-2 px-10 border rounded-md w-full focus:outline-none focus:border-blue-500">
+            <option value="" disabled selected>Select a Doctor</option>
+            {% for doctor in result%}
+                <option value={{doctor.user.username}}>Dr.{{doctor.user.username}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    {% else %} 
+        <p class="text-red-600 font-semibold text-center text-xl">
+            No Doctors Available Choose Another Date
+        </p>
     {% endif %}
 {%endif%}
